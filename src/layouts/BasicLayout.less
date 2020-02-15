@@ -1,0 +1,90 @@
+@import '~antd/es/style/themes/default.less';
+
+.header {
+  :global {
+    .antd-pro-components-global-header-index-name {
+      color: #fff;
+    }
+
+    .ant-pro-top-nav-header-logo {
+      width: 500px !important;
+    }
+  }
+
+  .content {
+    width: 100%;
+    height: calc(100vh - 64px);
+    overflow-y: hidden;
+
+    .content-left-unfold {
+      width: 256px;
+      float: left;
+      transition: width 0.2s;
+      height: calc(100vh - 64px);
+      background-color: #001529;
+      overflow-y: auto;
+      scrollbar-width: none; /* firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
+
+    .content-left-unfold::-webkit-scrollbar {
+      display: none; /* Chrome Safari */
+    }
+
+    .content-left-fold {
+      width: 80px;
+      float: left;
+      transition: width 0.2s;
+      height: calc(100vh - 64px);
+      background-color: #001529;
+      overflow-y: scroll;
+      scrollbar-width: none; /* firefox */
+      -ms-overflow-style: none; /* IE 10+ */
+    }
+
+    .content-left-fold::-webkit-scrollbar {
+      display: none; /* Chrome Safari */
+    }
+
+    .content-right-unfold {
+      width: calc(100% - 90px);
+      float: left;
+      transition: width 0.2s;
+      padding: 10px;
+    }
+
+    .content-right-fold {
+      width: calc(100% - 256px);
+      float: left;
+      transition: width 0.2s;
+      padding: 10px 0 0 10px;
+    }
+
+    .tips {
+      height: 40px;
+      line-height: 40px;
+      background-color: #fff;
+      margin-bottom: 10px;
+
+      .button {
+        float: left;
+        line-height: 40px;
+      }
+
+      :global {
+        .ant-btn-link {
+          color: rgba(0,0,0,0.65);
+        }
+
+        .ant-breadcrumb {
+          float: left;
+          line-height: 40px;
+        }
+      }
+    }
+
+    .content {
+      background-color: #fff;
+    }
+  }
+}
