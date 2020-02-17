@@ -191,7 +191,7 @@ export default {
     },
     // TODO 上线环境修改target配置
     '/server/pro/api': {
-      target: 'http://127.0.0.1:9527/#/',
+      target: 'http://yapi.demo.qunar.com/mock/50490/',
       changeOrigin: true,
       pathRewrite: { '^/server/pro/api': '' },
       // bypass: function(req, res, proxyOptions) {

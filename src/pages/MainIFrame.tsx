@@ -3,6 +3,8 @@ import { ConnectState } from '@/models/connect';
 import { connect } from 'dva';
 import { LoginOut } from '@/models/login';
 import { getStorageByKey, KEYS } from '@/utils/globalSession';
+import { basePageProUrl, basePagedevUrl } from '../../config/pageUrlSettings'
+import { isAntDesignProOrDev } from '@/utils/utils'
 
 const MainIFrame: React.FC<{}> = (props: any) => {
   const { dispatch, location } = props;
@@ -33,7 +35,6 @@ const MainIFrame: React.FC<{}> = (props: any) => {
       //   payload: [...routePageSrcList, e.data.res],
       // })
     }
-
     if (e && e.data && e.data.type === LoginOut.flag) {
       // 登出时同时将当前页面位置保存至缓存中,登录后能回到该页面
       // setGlobalToken(TOKENMAPPER.location, JSON.stringify(props.location.state || ''))
@@ -70,7 +71,7 @@ const MainIFrame: React.FC<{}> = (props: any) => {
   }, [isFull])
 
   return <iframe id="iframe" title="page" style={{ border: 0, width: '100%', height: '100%', overflow: 'hidden' }}
-          src={`http://localhost:9527/#/${path}?token=${getStorageByKey(KEYS.token)}&&showHeader=false`}></iframe>
+          src={`${isAntDesignProOrDev() ? basePagedevUrl : basePageProUrl}${path}?token=${getStorageByKey(KEYS.token)}&&showHeader=false`}></iframe>
 }
 
 export default connect(({ user, global }: ConnectState) => ({

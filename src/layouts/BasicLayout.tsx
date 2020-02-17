@@ -283,7 +283,7 @@ const BasicLayout: React.FC<any> = props => {
               }
             </Breadcrumb>
             {!isInMenu(`${pageLocation.split('?')[0].substring(1)}`, menus) && <Button type="link" onClick={goBack} className={styles.button}>
-                返回上一页
+              返回上一页
             </Button>}
           </div>
           <div className={styles.content}>
