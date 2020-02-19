@@ -149,12 +149,18 @@ const BasicLayout: React.FC<any> = props => {
   let { breadcrumbs } = props;
 
   let path = '';
-  if (location.state) {
+  if (location && location.state && location.state.hasOwnProperty('resPath')) {
     const { resPath } = location && location.state
     path = resPath;
+    breadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : JSON.parse(getStorageByKey(KEYS.bread) || '{}')
+  } else {
+    // TODO 能够动态获取首页 和 面包屑的值
+    path = 'dashboard';
+    breadcrumbs = ['总体监控预览']
   }
-  const openkeysResult = getSelectedKeysByPath(menus, path || '');
-  breadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : JSON.parse(getStorageByKey(KEYS.bread) || '{}')
+
+  // 根据path获取菜单选中的keys
+  const openkeysResult = getSelectedKeysByPath(menus, path);
 
   // 1、获取当前用户信息
   useEffect(() => {
@@ -242,7 +248,6 @@ const BasicLayout: React.FC<any> = props => {
   }
 
   return isFull ? <> {children} </> :
-  // TODO <Link to="/"> 点击logo 跳转到首页
     <ProLayout
       contentStyle={{ margin: 0 }}
       className={styles.header}

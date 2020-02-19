@@ -9,7 +9,7 @@ import { isAntDesignProOrDev } from '@/utils/utils'
 const MainIFrame: React.FC<{}> = (props: any) => {
   const { dispatch, location } = props;
 
-  let path = 'dashboard';
+  let path = '';
   let isFull = false;
   if (location && location.state) {
     const { resPath, isFullScreen } = location.state

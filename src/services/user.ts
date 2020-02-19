@@ -26,14 +26,13 @@ export function transformMenus(menus: any[]): any {
   if (leftMenu) {
     leftMenu.forEach(item => transformed.push({
       // path: `${item.resPath}` || `${index}`,
-      path: '/main',
+      path: '/views',
       name: item.resName,
       children: transformMenus(item.children),
       sysCode: item.sysCode,
       resPath: item.resPath,
       isFull: Boolean(item.controlClassName),
       icon: 'dashboard',
-      component: './Frame',
     }))
   }
   return transformed;

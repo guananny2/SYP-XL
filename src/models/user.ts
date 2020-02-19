@@ -128,19 +128,20 @@ const UserModel: UserModelType = {
         msg.error(message)
         return
       }
-      const menus1 = [
-        {
-          path: '/views',
-          name: '总体监控预览',
-          children: [],
-          sysCode: 'ee',
-          resPath: 'dashboard',
-          icon: 'dashboard',
-        },
-      ]
+      // const menus1 = [
+      //   {
+      //     path: '/views',
+      //     name: '总体监控预览',
+      //     children: [],
+      //     sysCode: 'ee',
+      //     resPath: 'dashboard',
+      //     icon: 'dashboard',
+      //   },
+      // ]
       yield put({
         type: 'saveMenu',
-        payload: [...transformMenus(result), ...menus1],
+        // payload: [...transformMenus(result), ...menus1],
+        payload: [...transformMenus(result)],
       });
       yield put({
         type: 'saveCenterMenu',

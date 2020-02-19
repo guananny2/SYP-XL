@@ -13,7 +13,7 @@ import styles from './style.less';
 import { LoginParamsType } from '@/services/login';
 import { ConnectState } from '@/models/connect';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents;
+const { UserName, Password, Submit } = LoginComponents;
 
 interface LoginProps {
   dispatch: Dispatch<AnyAction>;
@@ -108,7 +108,7 @@ class Login extends Component<LoginProps, LoginState> {
             this.loginForm = form;
           }}
         >
-          <Tab key="account" tab={formatMessage({ id: 'user-login.login.tab-login-credentials' })}>
+  {/* <Tab key="account" tab={formatMessage({ id: 'user-login.login.tab-login-credentials' })}> */}
             {status === 'error' &&
               loginType === 'account' &&
               !submitting &&
@@ -141,8 +141,8 @@ class Login extends Component<LoginProps, LoginState> {
                 }
               }}
             />
-          </Tab>
-          <Tab key="mobile" tab={formatMessage({ id: 'user-login.login.tab-login-mobile' })}>
+          {/* </Tab> */}
+          {/* <Tab key="mobile" tab={formatMessage({ id: 'user-login.login.tab-login-mobile' })}>
             {status === 'error' &&
               loginType === 'mobile' &&
               !submitting &&
@@ -177,7 +177,7 @@ class Login extends Component<LoginProps, LoginState> {
                 },
               ]}
             />
-          </Tab>
+          </Tab> */}
           <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               <FormattedMessage id="user-login.login.remember-me" />
