@@ -3,17 +3,17 @@ import { ConnectState } from '@/models/connect';
 import { connect } from 'dva';
 import NoFoundPage from './404';
 import { LoginOut } from '@/models/login';
-import { getStorageByKey, KEYS } from '@/utils/globalSession';
+// import { getStorageByKey, KEYS } from '@/utils/globalSession';
 
-function getRealUrl(sysList: any[], sysCode: string) {
-  let url = '';
-  sysList.forEach(item => {
-    if (sysCode === item.sysCode) {
-      url = item.sysURL;
-    }
-  })
-  return url;
-}
+// function getRealUrl(sysList: any[], sysCode: string) {
+//   let url = '';
+//   sysList.forEach(item => {
+//     if (sysCode === item.sysCode) {
+//       url = item.sysURL;
+//     }
+//   })
+//   return url;
+// }
 
 const MainFrame: React.FC<{}> = (props: any) => {
   const { sysList, dispatch, location, routePageSrcList } = props;
@@ -38,7 +38,9 @@ const MainFrame: React.FC<{}> = (props: any) => {
           paramsUrl += `&${item}=${params[item]}`
         })
       }
-      const src = `${getRealUrl(sysList, e.data.sysCode)}/${e.data.res}?token=${getStorageByKey(KEYS.token)}${paramsUrl}`
+      // const src1 = `${getRealUrl(sysList, e.data.sysCode)}/${e.data.res}?token=${getStorageByKey(KEYS.token)}${paramsUrl}`
+      // console.log('src1', src1)
+      const src = `http://www.xl-hby.com:28890/EP-Web/${e.data.res}?token=6490119478779904${paramsUrl}`
       dispatch({
         type: 'global/saveRoutePageSrcList',
         payload: [...routePageSrcList, src],
@@ -64,7 +66,7 @@ const MainFrame: React.FC<{}> = (props: any) => {
   }, [isFull])
 
   useEffect(() => {
-    // 添加子页面中 事件触发页面跳转监听
+    // 添加子页面中 事件f触发页面跳转监听
     window.addEventListener('message', listener)
     return () => {
       window.removeEventListener('message', listener)
@@ -74,7 +76,8 @@ const MainFrame: React.FC<{}> = (props: any) => {
   useEffect(() => {
     dispatch({
       type: 'global/saveRoutePageSrcList',
-      payload: [`${getRealUrl(sysList, code)}/${path}?token=${getStorageByKey(KEYS.token)}`],
+      payload: [`http://www.xl-hby.com:28890/EP-Web/${path}?token=6490119478779904`],
+      // payload: [`${getRealUrl(sysList, code)}/${path}?token=${getStorageByKey(KEYS.token)}`],
     })
   }, [sysList, path, code])
 
@@ -84,7 +87,7 @@ const MainFrame: React.FC<{}> = (props: any) => {
         routePageSrcList.map((src: string, idx: number) =>
           <div style={{ height: isFull ? '100vh' : 'calc(100vh - 130px)', zIndex: idx, display: `${idx === (routePageSrcList.length - 1) ? '' : 'none'}` }}>
             <iframe title="page" style={{ border: 0, width: '100%', height: '100%', overflow: 'hidden' }}
-              src={src}></iframe>
+              src={src} />
           </div>,
         )
       }

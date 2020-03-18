@@ -142,7 +142,7 @@ const BasicLayout: React.FC<any> = props => {
           menus,
           sysTitle,
           collapsed,
-          // routePageSrcList,
+          routePageSrcList,
           isFull,
           pageLocation,
         } = props;
@@ -221,13 +221,16 @@ const BasicLayout: React.FC<any> = props => {
 
   // 框架系统执行返回功能
   const goBack = (): void => {
-    window.history.back();
-    // if (dispatch) {
-    //   dispatch({
-    //     type: 'global/saveRoutePageSrcList',
-    //     payload: routePageSrcList.slice(0, routePageSrcList.length - 1),
-    //   });
-    // }
+    if(location.pathname === '/main') {
+      if (dispatch) {
+        dispatch({
+          type: 'global/saveRoutePageSrcList',
+          payload: routePageSrcList.slice(0, routePageSrcList.length - 1),
+        });
+      }
+    }else {
+      window.history.back();
+    }
   }
 
   // get children authority
@@ -287,9 +290,16 @@ const BasicLayout: React.FC<any> = props => {
                     <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>) : null
               }
             </Breadcrumb>
-            {!isInMenu(`${pageLocation.split('?')[0].substring(1)}`, menus) && <Button type="link" onClick={goBack} className={styles.button}>
-              返回上一页
-            </Button>}
+            {
+              location.pathname === '/main' ? 
+              routePageSrcList.length > 1 &&
+              <Button type="link" onClick={goBack} className={styles.button}>
+                返回上一页
+              </Button> :
+              !isInMenu(`${pageLocation.split('?')[0].substring(1)}`, menus) && <Button type="link" onClick={goBack} className={styles.button}>
+                返回上一页
+              </Button>
+            }
           </div>
           <div className={styles.content}>
             {/* <Authorized authority={authorized!.authority} noMatch={noMatch}> */}

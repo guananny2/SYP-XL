@@ -25,8 +25,8 @@ export function transformMenus(menus: any[]): any {
   const leftMenu = menus && menus.filter(item => item.resName !== '个人中心');
   if (leftMenu) {
     leftMenu.forEach(item => transformed.push({
-      // path: `${item.resPath}` || `${index}`,
-      path: '/views',
+      // path: `${item.rm.pathesPath} ` || `${index}`,
+      path: item.path,
       name: item.resName,
       children: transformMenus(item.children),
       sysCode: item.sysCode,
