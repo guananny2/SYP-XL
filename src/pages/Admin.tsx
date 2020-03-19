@@ -40,7 +40,7 @@ const MainFrame: React.FC<{}> = (props: any) => {
       }
       // const src1 = `${getRealUrl(sysList, e.data.sysCode)}/${e.data.res}?token=${getStorageByKey(KEYS.token)}${paramsUrl}`
       // console.log('src1', src1)
-      const src = `http://www.xl-hby.com:28890/EP-Web/${e.data.res}?token=6490119478779904${paramsUrl}`
+      const src = `http://www.xl-hby.com:28890/EP-Web/${e.data.res}?token=6490457316532224${paramsUrl}`
       dispatch({
         type: 'global/saveRoutePageSrcList',
         payload: [...routePageSrcList, src],
@@ -76,7 +76,7 @@ const MainFrame: React.FC<{}> = (props: any) => {
   useEffect(() => {
     dispatch({
       type: 'global/saveRoutePageSrcList',
-      payload: [`http://www.xl-hby.com:28890/EP-Web/${path}?token=6490119478779904`],
+      payload: [`http://www.xl-hby.com:28890/EP-Web/${path}?token=6490457316532224`],
       // payload: [`${getRealUrl(sysList, code)}/${path}?token=${getStorageByKey(KEYS.token)}`],
     })
   }, [sysList, path, code])

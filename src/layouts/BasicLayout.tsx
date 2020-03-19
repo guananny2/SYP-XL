@@ -221,16 +221,16 @@ const BasicLayout: React.FC<any> = props => {
 
   // 框架系统执行返回功能
   const goBack = (): void => {
-    if(location.pathname === '/main') {
-      if (dispatch) {
-        dispatch({
-          type: 'global/saveRoutePageSrcList',
-          payload: routePageSrcList.slice(0, routePageSrcList.length - 1),
-        });
+    if(routePageSrcList.length > 0) {
+        if (dispatch) {
+          dispatch({
+            type: 'global/saveRoutePageSrcList',
+            payload: routePageSrcList.slice(0, routePageSrcList.length - 1),
+          });
+        }
+      }else {
+        window.history.back();
       }
-    }else {
-      window.history.back();
-    }
   }
 
   // get children authority
@@ -292,13 +292,14 @@ const BasicLayout: React.FC<any> = props => {
             </Breadcrumb>
             {
               location.pathname === '/main' ? 
-              routePageSrcList.length > 1 &&
+              (routePageSrcList.length > 1 &&
               <Button type="link" onClick={goBack} className={styles.button}>
                 返回上一页
-              </Button> :
-              !isInMenu(`${pageLocation.split('?')[0].substring(1)}`, menus) && <Button type="link" onClick={goBack} className={styles.button}>
+              </Button>) :
+              ((!isInMenu(`${pageLocation.split('?')[0].substring(1)}`, menus) || routePageSrcList.length > 0) 
+              && <Button type="link" onClick={goBack} className={styles.button}>
                 返回上一页
-              </Button>
+              </Button>)
             }
           </div>
           <div className={styles.content}>
