@@ -10,9 +10,9 @@ import { isAntDesignProOrDev, jsonParse } from './utils';
 /**
  * @typedef {import('./request').RequestMethod} RequestMethod
  */
-const baseUrl = isAntDesignProOrDev() ? '/server/api/' : '/server/pro/api';
+const baseUrl = isAntDesignProOrDev() ? '/server/api' : '/server/pro/api';
 
-const whiteList = ['/login'] // no redirect whitelist
+const whiteList = ['/login']; // no redirect whitelist
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -49,61 +49,63 @@ const request = extend({
  * @returns {RequestMethod}
  */
 function handleResult(rm: any) {
-  const filter = (method: any) => async function exec(...args: any[]) {
-    // eslint-disable-next-line prefer-const
-    let data;
-    let response;
-    try {
-      ({ data, response } = await method(...args));
-      data = jsonParse(data);
-    } catch (e) {
-      response = e.response || {};
-      data = {
-        msg: codeMessage[response.status] || '网络错误',
-        code: response.status,
-      };
-    }
-
-    // TODO if中的判断条件根据业务接口定义的code来拦截用户的登出
-    if (
-      response.status === 401 ||
-      response.status === 403 ||
-      data.code === 401 ||
-      data.code === 1008 || // 1008, "Token无效"
-      data.code === 9005 || // 9005, "token被作废"
-      data.code === 9555 || // "角色或权限不匹配"
-      data.code === 9900 // "账户被冻结"
-    ) {
-      // token 过期，重新登录
-      message.error('token 过期，请重新登录')
-      window['g_app']._store.dispatch({ type: 'login/logout' });
-    }
-    // else if (response.headers instanceof Headers) {
-    //   const refresh = response.headers.get('refresh') || '0';
-    //   const token = response.headers.get('token') || '';
-    //   if (refresh === '1' && token) {
-    //     // eslint-disable-next-line no-underscore-dangle
-    //     const { user } = window.g_app._store.getState();
-    //     const oldToken = user.currentUser ? user.currentUser.token : '';
-    //     if (oldToken !== token) {
-    //       // eslint-disable-next-line no-underscore-dangle
-    //       window.g_app._store.dispatch({
-    //         type: 'user/saveToken',
-    //         payload: token,
-    //       });
-    //     }
-    //   }
-    // }
-    if (data instanceof Object) {
-      data.ok = +data.code === 200;
-      if (isAntDesignProOrDev() && response) {
-        console.group(`请求接口 ${response.url}`);
-        console.log(data);
-        console.groupEnd();
+  const filter = (method: any) =>
+    async function exec(...args: any[]) {
+      // eslint-disable-next-line prefer-const
+      let data;
+      let response;
+      try {
+        ({ data, response } = await method(...args));
+        data = jsonParse(data);
+      } catch (e) {
+        response = e.response || {};
+        data = {
+          msg: codeMessage[response.status] || '网络错误',
+          code: response.status,
+        };
       }
-    }
-    return data;
-  };
+
+      // TODO if中的判断条件根据业务接口定义的code来拦截用户的登出
+      if (
+        response.status === 401 ||
+        response.status === 403 ||
+        data.code === 401 ||
+        data.code === 1008 || // 1008, "Token无效"
+        data.code === 9005 || // 9005, "token被作废"
+        data.code === 9555 || // "角色或权限不匹配"
+        data.code === 9900 // "账户被冻结"
+      ) {
+        // token 过期，重新登录
+        message.error('token 过期，请重新登录');
+        window['g_app']._store.dispatch({ type: 'login/logout' });
+      }
+      // else if (response.headers instanceof Headers) {
+      //   const refresh = response.headers.get('refresh') || '0';
+      //   const token = response.headers.get('token') || '';
+      //   if (refresh === '1' && token) {
+      //     // eslint-disable-next-line no-underscore-dangle
+      //     const { user } = window.g_app._store.getState();
+      //     const oldToken = user.currentUser ? user.currentUser.token : '';
+      //     if (oldToken !== token) {
+      //       // eslint-disable-next-line no-underscore-dangle
+      //       window.g_app._store.dispatch({
+      //         type: 'user/saveToken',
+      //         payload: token,
+      //       });
+      //     }
+      //   }
+      // }
+      if (data instanceof Object) {
+        // data.ok = +data.code === 200;
+        data.ok = data.isSuccess;
+        if (isAntDesignProOrDev() && response) {
+          console.group(`请求接口 ${response.url}`);
+          console.log(data);
+          console.groupEnd();
+        }
+      }
+      return data;
+    };
 
   function input(...args: any[]) {
     return filter(rm)(...args);

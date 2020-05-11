@@ -74,8 +74,8 @@ export default {
   targets: {
     ie: 11,
   },
-  // umi routes: 
-  
+  // umi routes:
+
   routes: [
     {
       path: '/user',
@@ -112,7 +112,7 @@ export default {
               path: '/views',
               name: 'views',
               icon: 'crown',
-              component: './MainIFrame'
+              component: './MainIFrame',
               // authority: ['admin'],
             },
             {
@@ -185,7 +185,7 @@ export default {
     //   pathRewrite: { '^/server/api/': '' },
     // },
     '/server/api/': {
-      target: 'http://yapi.demo.qunar.com/mock/50490/',
+      target: 'http://172.172.0.107:18081/app/mock/26',
       changeOrigin: true,
       pathRewrite: { '^/server/api/': '' },
     },
@@ -198,6 +198,5 @@ export default {
       //   console.log('Skipping proxy for browser request.', req)
       // }
     },
-    
   },
 } as IConfig;

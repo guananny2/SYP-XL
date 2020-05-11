@@ -1,15 +1,18 @@
+import { KEYS } from '../utils/globalSession';
 import { Effect } from 'dva';
 import { Reducer } from 'redux';
 import { message as msg } from 'antd';
-import { setToStorageByKey } from '@/utils/globalSession';
-import { queryCurrent,
-         query as queryUsers,
-         queryMenus, transformMenus,
-         querySysList,
-         querySysTitle,
-         getCenterMenu,
-         queryPermissionButtons as queryButtons,
-        } from '@/services/user';
+import { setToStorageByKey, getStorageByKey } from '@/utils/globalSession';
+import {
+  queryCurrent,
+  query as queryUsers,
+  queryMenus,
+  transformMenus,
+  querySysList,
+  querySysTitle,
+  getCenterMenu,
+  queryPermissionButtons as queryButtons,
+} from '@/services/user';
 
 export interface CurrentUser {
   avatar?: string;
@@ -112,10 +115,11 @@ const UserModel: UserModelType = {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const { result, ok, message } = yield call(queryCurrent);
+      const param = { token: getStorageByKey(KEYS.token) };
+      const { result, ok, message } = yield call(queryCurrent, param);
       if (!ok) {
-        msg.error(message)
-        return
+        msg.error(message);
+        return;
       }
       yield put({
         type: 'saveCurrentUser',
@@ -123,10 +127,11 @@ const UserModel: UserModelType = {
       });
     },
     *fetchMenu(_, { call, put }) {
-      const { result, ok, message } = yield call(queryMenus);
+      const param = { token: getStorageByKey(KEYS.token) };
+      const { result, ok, message } = yield call(queryMenus, param);
       if (!ok) {
-        msg.error(message)
-        return
+        msg.error(message);
+        return;
       }
       // const menus1 = [
       //   {
@@ -149,34 +154,36 @@ const UserModel: UserModelType = {
       });
     },
     *fetchSysList(_, { call, put }) {
-      const { result, ok, message } = yield call(querySysList);
+      const param = { token: getStorageByKey(KEYS.token) };
+      const { result, ok, message } = yield call(querySysList, param);
       if (!ok) {
-        msg.error(message)
-        return
+        msg.error(message);
+        return;
       }
       yield put({
         type: 'saveSysList',
         payload: result,
-      })
+      });
     },
     *fetchSysTitle(_, { call, put }) {
-      const { result, ok, message } = yield call(querySysTitle);
+      const param = { token: getStorageByKey(KEYS.token) };
+      const { result, ok, message } = yield call(querySysTitle, param);
       if (!ok) {
-        msg.error(message)
-        return
+        msg.error(message);
+        return;
       }
       yield put({
         type: 'saveSysTitle',
         payload: result,
-      })
+      });
     },
     *fetchButtons(_, { call }) {
       const { result, ok, message } = yield call(queryButtons);
       if (!ok) {
-        msg.error(message)
-        return
+        msg.error(message);
+        return;
       }
-      setToStorageByKey('permission-button', JSON.stringify(result))
+      setToStorageByKey('permission-button', JSON.stringify(result));
     },
   },
 

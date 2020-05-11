@@ -72,7 +72,6 @@ function getSelectedKeysByPath(menusdata: any[], defaultPath: string | undefined
   };
 }
 
-
 /**
  * 递归获取key
  * @param menusdata 资源菜单
@@ -83,7 +82,8 @@ function getKeys(
   menusdata: any[],
   defaultPath: string | undefined,
   seletedKeys: string[],
-  parents: string[]) {
+  parents: string[],
+) {
   menusdata.forEach(item => {
     parents.push(item.name);
     if (item.resPath === defaultPath) {
@@ -101,26 +101,26 @@ function getKeys(
 function isInMenu(code: string, menusdata: any[]): boolean {
   if (menusdata && menusdata.length > 0) {
     for (let i = 0; i < menusdata.length; i += 1) {
-      const node = menusdata[i]
+      const node = menusdata[i];
       if (node.resPath === code) {
-        return true
+        return true;
       }
       if (node.children) {
         const kids = node.children;
         for (let j = 0; j < kids.length; j += 1) {
-          const kid = kids[j]
+          const kid = kids[j];
           if (kid.resPath === code) {
-            return true
+            return true;
           }
-          const res = isInMenu(code, kid.children)
+          const res = isInMenu(code, kid.children);
           if (res) {
-            return true
+            return true;
           }
         }
       }
     }
   }
-  return false
+  return false;
 }
 
 /**
@@ -136,42 +136,35 @@ function isInMenu(code: string, menusdata: any[]): boolean {
 //   });
 
 const BasicLayout: React.FC<any> = props => {
-  const { dispatch,
-          children,
-          location = { pathname: '/', state: {} },
-          menus,
-          sysTitle,
-          collapsed,
-          routePageSrcList,
-          isFull,
-          pageLocation,
-        } = props;
+  const {
+    dispatch,
+    children,
+    location = { pathname: '/', state: {} },
+    menus,
+    sysTitle,
+    collapsed,
+    routePageSrcList,
+    isFull,
+    pageLocation,
+  } = props;
   let { breadcrumbs } = props;
 
   let path = '';
   if (location && location.state && location.state.hasOwnProperty('resPath')) {
-    const { resPath } = location && location.state
+    const { resPath } = location && location.state;
     path = resPath;
-    breadcrumbs = breadcrumbs.length > 0 ? breadcrumbs : JSON.parse(getStorageByKey(KEYS.bread) || '{}')
+    breadcrumbs =
+      breadcrumbs.length > 0 ? breadcrumbs : JSON.parse(getStorageByKey(KEYS.bread) || '{}');
   } else {
     // TODO 能够动态获取首页 和 面包屑的值
     path = 'dashboard';
-    breadcrumbs = ['总体监控预览']
+    breadcrumbs = ['总体监控预览'];
   }
 
   // 根据path获取菜单选中的keys
   const openkeysResult = getSelectedKeysByPath(menus, path);
 
-  // 1、获取当前用户信息
-  useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
-    }
-  }, []);
-
-  // 2、获取菜单
+  // 1、获取菜单
   useEffect(() => {
     if (dispatch) {
       dispatch({
@@ -185,7 +178,7 @@ const BasicLayout: React.FC<any> = props => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchSysList',
-      })
+      });
     }
   }, []);
 
@@ -194,7 +187,7 @@ const BasicLayout: React.FC<any> = props => {
     if (dispatch) {
       dispatch({
         type: 'user/fetchSysTitle',
-      })
+      });
     }
   }, []);
 
@@ -205,7 +198,6 @@ const BasicLayout: React.FC<any> = props => {
   //     })
   //   }
   // }, [])
-
 
   /**
    * init variables
@@ -221,17 +213,17 @@ const BasicLayout: React.FC<any> = props => {
 
   // 框架系统执行返回功能
   const goBack = (): void => {
-    if(routePageSrcList.length > 0) {
-        if (dispatch) {
-          dispatch({
-            type: 'global/saveRoutePageSrcList',
-            payload: routePageSrcList.slice(0, routePageSrcList.length - 1),
-          });
-        }
-      }else {
-        window.history.back();
+    if (routePageSrcList.length > 0) {
+      if (dispatch) {
+        dispatch({
+          type: 'global/saveRoutePageSrcList',
+          payload: routePageSrcList.slice(0, routePageSrcList.length - 1),
+        });
       }
-  }
+    } else {
+      window.history.back();
+    }
+  };
 
   // get children authority
   // const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
@@ -240,17 +232,19 @@ const BasicLayout: React.FC<any> = props => {
 
   const onclick = (param: ClickParam) => {
     const { keyPath } = param;
-    const crumbs = keyPath.length > 0 ? [...keyPath].reverse() : []
-    setToStorageByKey(KEYS.bread, JSON.stringify(crumbs))
+    const crumbs = keyPath.length > 0 ? [...keyPath].reverse() : [];
+    setToStorageByKey(KEYS.bread, JSON.stringify(crumbs));
     if (dispatch) {
       dispatch({
         type: 'global/saveBreadcrumbs',
         payload: crumbs,
-      })
+      });
     }
-  }
+  };
 
-  return isFull ? <> {children} </> :
+  return isFull ? (
+    <> {children} </>
+  ) : (
     <ProLayout
       contentStyle={{ margin: 0 }}
       className={styles.header}
@@ -258,11 +252,14 @@ const BasicLayout: React.FC<any> = props => {
       disableMobile
       title={sysTitle.sysName}
       logo={sysTitle.sysIcon}
-      menuHeaderRender={(logoDom, titleDom) => <Link to="/">
-        {logoDom}
-        {titleDom}
-      </Link>}
-      rightContentRender={rightProps => <RightContent {...rightProps} />}>
+      menuHeaderRender={(logoDom, titleDom) => (
+        <Link to="/">
+          {logoDom}
+          {titleDom}
+        </Link>
+      )}
+      rightContentRender={rightProps => <RightContent {...rightProps} />}
+    >
       <div className={styles.content}>
         <div className={styles[collapsed ? 'content-left-fold' : 'content-left-unfold']}>
           {
@@ -284,23 +281,24 @@ const BasicLayout: React.FC<any> = props => {
               <Icon type={collapsed ? 'menu-unfold' : 'menu-fold'} />
             </Button>
             <Breadcrumb className={styles.breadcrumb}>
-              {
-                breadcrumbs.length > 0 ?
-                  breadcrumbs.map((item: string) =>
-                    <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>) : null
-              }
+              {breadcrumbs.length > 0
+                ? breadcrumbs.map((item: string) => (
+                    <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
+                  ))
+                : null}
             </Breadcrumb>
-            {
-              location.pathname === '/main' ? 
-              (routePageSrcList.length > 1 &&
-              <Button type="link" onClick={goBack} className={styles.button}>
-                返回上一页
-              </Button>) :
-              ((!isInMenu(`${pageLocation.split('?')[0].substring(1)}`, menus) || routePageSrcList.length > 0) 
-              && <Button type="link" onClick={goBack} className={styles.button}>
-                返回上一页
-              </Button>)
-            }
+            {location.pathname === '/main'
+              ? routePageSrcList.length > 1 && (
+                  <Button type="link" onClick={goBack} className={styles.button}>
+                    返回上一页
+                  </Button>
+                )
+              : (!isInMenu(`${pageLocation.split('?')[0].substring(1)}`, menus) ||
+                  routePageSrcList.length > 0) && (
+                  <Button type="link" onClick={goBack} className={styles.button}>
+                    返回上一页
+                  </Button>
+                )}
           </div>
           <div className={styles.content}>
             {/* <Authorized authority={authorized!.authority} noMatch={noMatch}> */}
@@ -310,6 +308,7 @@ const BasicLayout: React.FC<any> = props => {
         </div>
       </div>
     </ProLayout>
+  );
 };
 
 export default connect(({ global, user }: ConnectState) => ({
